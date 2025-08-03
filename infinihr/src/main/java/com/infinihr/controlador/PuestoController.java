@@ -4,27 +4,27 @@
  */
 package com.infinihr.controlador;
 
-import com.infinihr.entidades.Empleado;
-import com.infinihr.repositorio.EmpleadoRepository;
+import com.infinihr.entidades.Puesto;
+import com.infinihr.repositorio.PuestoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/empleados")
-public class EmpleadoController {
+@RequestMapping("/api/puestos")
+public class PuestoController {
 
     @Autowired
-    private EmpleadoRepository empleadoRepository;
+    private PuestoRepository puestoRepository;
 
     @GetMapping
-    public List<Empleado> getAllEmpleados() {
-        return empleadoRepository.findAll();
+    public List<Puesto> getAllPuestos() {
+        return puestoRepository.findAll();
     }
 
     @PostMapping
-    public Empleado crearEmpleado(@RequestBody Empleado empleado) {
-        return empleadoRepository.save(empleado);
+    public Puesto crearPuesto(@RequestBody Puesto puesto) {
+        return puestoRepository.save(puesto);
     }
 }

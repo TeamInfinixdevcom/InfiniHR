@@ -4,27 +4,33 @@
  */
 package com.infinihr.controlador;
 
-import com.infinihr.entidades.Empleado;
-import com.infinihr.repositorio.EmpleadoRepository;
+/**
+ *
+ * @author ruben
+ */
+
+
+import com.infinihr.entidades.Genero;
+import com.infinihr.repositorio.GeneroRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/empleados")
-public class EmpleadoController {
+@RequestMapping("/api/generos")
+public class GeneroController {
 
     @Autowired
-    private EmpleadoRepository empleadoRepository;
+    private GeneroRepository generoRepository;
 
     @GetMapping
-    public List<Empleado> getAllEmpleados() {
-        return empleadoRepository.findAll();
+    public List<Genero> getAll() {
+        return generoRepository.findAll();
     }
 
     @PostMapping
-    public Empleado crearEmpleado(@RequestBody Empleado empleado) {
-        return empleadoRepository.save(empleado);
+    public Genero crear(@RequestBody Genero genero) {
+        return generoRepository.save(genero);
     }
 }

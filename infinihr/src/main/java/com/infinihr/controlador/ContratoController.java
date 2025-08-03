@@ -4,27 +4,28 @@
  */
 package com.infinihr.controlador;
 
-import com.infinihr.entidades.Empleado;
-import com.infinihr.repositorio.EmpleadoRepository;
+import com.infinihr.entidades.Contrato;
+import com.infinihr.repositorio.ContratoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/empleados")
-public class EmpleadoController {
+@RequestMapping("/api/contratos")
+public class ContratoController {
 
     @Autowired
-    private EmpleadoRepository empleadoRepository;
+    private ContratoRepository contratoRepository;
 
     @GetMapping
-    public List<Empleado> getAllEmpleados() {
-        return empleadoRepository.findAll();
+    public List<Contrato> getAllContratos() {
+        return contratoRepository.findAll();
     }
 
     @PostMapping
-    public Empleado crearEmpleado(@RequestBody Empleado empleado) {
-        return empleadoRepository.save(empleado);
+    public Contrato crearContrato(@RequestBody Contrato contrato) {
+        return contratoRepository.save(contrato);
     }
 }
+

@@ -4,27 +4,32 @@
  */
 package com.infinihr.controlador;
 
-import com.infinihr.entidades.Empleado;
-import com.infinihr.repositorio.EmpleadoRepository;
+/**
+ *
+ * @author ruben
+ */
+
+import com.infinihr.entidades.Familia;
+import com.infinihr.repositorio.FamiliaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/empleados")
-public class EmpleadoController {
+@RequestMapping("/api/familias")
+public class FamiliaController {
 
     @Autowired
-    private EmpleadoRepository empleadoRepository;
+    private FamiliaRepository familiaRepository;
 
     @GetMapping
-    public List<Empleado> getAllEmpleados() {
-        return empleadoRepository.findAll();
+    public List<Familia> getAllFamilias() {
+        return familiaRepository.findAll();
     }
 
     @PostMapping
-    public Empleado crearEmpleado(@RequestBody Empleado empleado) {
-        return empleadoRepository.save(empleado);
+    public Familia crearFamilia(@RequestBody Familia familia) {
+        return familiaRepository.save(familia);
     }
 }
