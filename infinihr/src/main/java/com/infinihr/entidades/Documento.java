@@ -4,10 +4,6 @@
  */
 package com.infinihr.entidades;
 
-/**
- *
- * @author ruben
- */
 import jakarta.persistence.*;
 
 @Entity
@@ -18,57 +14,54 @@ public class Documento {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false, length = 255)
     private String nombre;
 
-    private String tipo; // Ej: "pdf", "jpg", etc.
+    @Column(nullable = false, length = 50)
+    private String tipo;
 
     @Lob
-    @Column(name = "archivo_binario")
+    @Column(
+        name = "archivo_binario",
+        nullable = false,
+        columnDefinition = "bytea"
+    )
     private byte[] archivoBinario;
-    // getters y setters
 
     @ManyToOne
-    @JoinColumn(name = "empleado_id")
+    @JoinColumn(name = "empleado_id", nullable = false)
     private Empleado empleado;
 
-    // Getters y setters
-    public Long getId() {
-        return id;
+    // --- Getters y Setters ---
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+
+    public String getNombre() { return nombre; }
+    public void setNombre(String nombre) { this.nombre = nombre; }
+
+    public String getTipo() { return tipo; }
+    public void setTipo(String tipo) { this.tipo = tipo; }
+
+    public byte[] getArchivoBinario() { return archivoBinario; }
+    public void setArchivoBinario(byte[] archivoBinario) {
+        this.archivoBinario = archivoBinario;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public String getTipo() {
-        return tipo;
-    }
-
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
-    }
-
-    public byte[] getArchivo() {
-        return archivoBinario;
-    }
-
-    public void setArchivo(byte[] archivo) {
-        this.archivoBinario = archivo;
-    }
-
-    public Empleado getEmpleado() {
-        return empleado;
-    }
-
+    public Empleado getEmpleado() { return empleado; }
     public void setEmpleado(Empleado empleado) {
         this.empleado = empleado;
     }
+
+    @Override
+    public String toString() {
+        return "Documento{" +
+            "id=" + id +
+            ", nombre='" + nombre + '\'' +
+            ", tipo='" + tipo + '\'' +
+            ", archivoBinario=" +
+                (archivoBinario != null ? archivoBinario.length + " bytes" : "null") +
+            ", empleado=" + (empleado != null ? empleado.getId() : "null") +
+            '}';
+    }
 }
+

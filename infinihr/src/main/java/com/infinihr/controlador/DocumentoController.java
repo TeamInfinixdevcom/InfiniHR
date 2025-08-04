@@ -1,4 +1,4 @@
-package com.infinihr.controlador;
+
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -8,61 +8,69 @@ package com.infinihr.controlador;
  *
  * @author ruben
  */
+package com.infinihr.controlador;
+
 import com.infinihr.entidades.Documento;
-import com.infinihr.entidades.Empleado;
-import com.infinihr.repositorio.DocumentoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.sql.DataSource;
 import java.io.IOException;
-import java.util.List;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 
 @RestController
 @RequestMapping("/api/documentos")
 public class DocumentoController {
 
     @Autowired
-    private DocumentoRepository documentoRepository;
+    private DataSource dataSource;
 
-    @GetMapping
-    public List<Documento> getAllDocumentos() {
-        return documentoRepository.findAll();
-    }
-
-    @PostMapping("/subir")
-    public Documento subirDocumento(
+    /**
+     * Endpoint JDBC puro para subir un documento completo
+     * URL: POST /api/documentos/subir-jdbc
+     */
+    @PostMapping(
+        value    = "/subir-jdbc",
+        consumes = MediaType.MULTIPART_FORM_DATA_VALUE
+    )
+    public ResponseEntity<String> subirDocumentoJdbc(
             @RequestParam("nombre") String nombre,
             @RequestParam("tipo") String tipo,
             @RequestParam("empleadoId") Long empleadoId,
             @RequestParam("archivo") MultipartFile archivo
-    ) throws IOException {
-        Documento doc = new Documento();
-        doc.setNombre(nombre);
-        doc.setTipo(tipo);
-        doc.setArchivo(archivo.getBytes());
+    ) {
+        String sql = "INSERT INTO documentos (nombre, tipo, archivo_binario, empleado_id) VALUES (?, ?, ?, ?)";
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
 
-        // ¡Clave para bytea!
-        // Asociar el documento a un empleado solo con el id
-        Empleado empleado = new Empleado();
-        empleado.setId(empleadoId);
-        doc.setEmpleado(empleado);
+            ps.setString(1, nombre);
+            ps.setString(2, tipo);
+            ps.setBytes(3, archivo.getBytes());
+            ps.setLong(4, empleadoId);
+            ps.executeUpdate();
 
-        return documentoRepository.save(doc);
-    }
+            return ResponseEntity.ok("Documento subido correctamente (JDBC directo).");
 
-    @GetMapping("/descargar/{id}")
-    public ResponseEntity<byte[]> descargarDocumento(@PathVariable Long id) {
-        Documento documento = documentoRepository.findById(id).orElse(null);
-        if (documento == null) {
-            return ResponseEntity.notFound().build();
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error al leer el archivo: " + ioe.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error JDBC: " + e.getMessage());
         }
-        return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + documento.getNombre() + "\"")
-                .contentType(MediaType.APPLICATION_OCTET_STREAM)
-                .body(documento.getArchivo());
     }
+
+    // (Opcional) tu endpoint JPA original:
+    // @PostMapping("/subir")
+    // public ResponseEntity<?> subirDocumentoJPA(...) { ... }
+
+    // @GetMapping
+    // public List<Documento> listar() { ... }
 }

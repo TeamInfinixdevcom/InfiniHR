@@ -4,8 +4,16 @@
  */
 package com.infinihr.repositorio;
 
-import com.infinihr.entidades.Empleado;
-import org.springframework.data.jpa.repository.JpaRepository;
+/**
+ *
+ * @author ruben
+ */
 
-public interface EmpleadoRepository extends JpaRepository<Empleado, Long> {
+
+import com.infinihr.entidades.TestBlob;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface TestBlobRepository extends JpaRepository<TestBlob, Integer> {
 }
