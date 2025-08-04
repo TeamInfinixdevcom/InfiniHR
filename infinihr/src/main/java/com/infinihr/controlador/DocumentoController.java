@@ -10,18 +10,14 @@
  */
 package com.infinihr.controlador;
 
-import com.infinihr.entidades.Documento;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.sql.DataSource;
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
+import java.io.*;
+import java.sql.*;
 
 @RestController
 @RequestMapping("/api/documentos")
@@ -30,21 +26,15 @@ public class DocumentoController {
     @Autowired
     private DataSource dataSource;
 
-    /**
-     * Endpoint JDBC puro para subir un documento completo
-     * URL: POST /api/documentos/subir-jdbc
-     */
-    @PostMapping(
-        value    = "/subir-jdbc",
-        consumes = MediaType.MULTIPART_FORM_DATA_VALUE
-    )
-    public ResponseEntity<String> subirDocumentoJdbc(
+    // 1) Subida vía JDBC
+    @PostMapping("/subir-jdbc")
+    public ResponseEntity<String> subirJdbc(
             @RequestParam("nombre") String nombre,
             @RequestParam("tipo") String tipo,
             @RequestParam("empleadoId") Long empleadoId,
-            @RequestParam("archivo") MultipartFile archivo
-    ) {
-        String sql = "INSERT INTO documentos (nombre, tipo, archivo_binario, empleado_id) VALUES (?, ?, ?, ?)";
+            @RequestParam("archivo") MultipartFile archivo) {
+
+        String sql = "INSERT INTO documentos(nombre, tipo, archivo_binario, empleado_id) VALUES (?, ?, ?, ?)";
         try (Connection conn = dataSource.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
@@ -54,23 +44,44 @@ public class DocumentoController {
             ps.setLong(4, empleadoId);
             ps.executeUpdate();
 
-            return ResponseEntity.ok("Documento subido correctamente (JDBC directo).");
+            return ResponseEntity.ok("Documento guardado correctamente (JDBC directo).");
 
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Error al leer el archivo: " + ioe.getMessage());
         } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Error JDBC: " + e.getMessage());
         }
     }
 
-    // (Opcional) tu endpoint JPA original:
-    // @PostMapping("/subir")
-    // public ResponseEntity<?> subirDocumentoJPA(...) { ... }
+    // 2) Descarga vía JDBC
+    @GetMapping("/descargar-jdbc/{id}")
+    public ResponseEntity<byte[]> descargarJdbc(@PathVariable Long id) {
+        String sql = "SELECT archivo_binario, nombre, tipo FROM documentos WHERE id = ?";
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
 
-    // @GetMapping
-    // public List<Documento> listar() { ... }
+            ps.setLong(1, id);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (!rs.next()) {
+                    return ResponseEntity.notFound().build();
+                }
+                byte[] datos = rs.getBytes("archivo_binario");
+                String nombre = rs.getString("nombre");
+                String tipo = rs.getString("tipo");
+
+                return ResponseEntity.ok()
+                        .header(HttpHeaders.CONTENT_DISPOSITION,
+                                "attachment; filename=\"" + nombre + "\"")
+                        .contentType(MediaType.parseMediaType("application/" + tipo))
+                        .body(datos);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .build();
+        }
+    }
 }
+
