@@ -11,7 +11,7 @@ import jakarta.persistence.*;
 public class Departamento {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     private String nombre;
 
@@ -22,9 +22,8 @@ public class Departamento {
     private Departamento departamentoPadre;
 
     // Getters y setters
-
-    public Integer getId() { return id; }
-    public void setId(Integer id) { this.id = id; }
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
     public String getNombre() { return nombre; }
     public void setNombre(String nombre) { this.nombre = nombre; }

@@ -18,6 +18,10 @@ public class Contrato {
     @JoinColumn(name = "empleado_id")
     private Empleado empleado;
 
+    @ManyToOne
+    @JoinColumn(name = "puesto_id")
+    private Puesto puesto;
+
     @Column(name = "fecha_inicio")
     private LocalDate fechaInicio;
 
@@ -36,6 +40,9 @@ public class Contrato {
 
     public Empleado getEmpleado() { return empleado; }
     public void setEmpleado(Empleado empleado) { this.empleado = empleado; }
+
+    public Puesto getPuesto() { return puesto; }
+    public void setPuesto(Puesto puesto) { this.puesto = puesto; }
 
     public LocalDate getFechaInicio() { return fechaInicio; }
     public void setFechaInicio(LocalDate fechaInicio) { this.fechaInicio = fechaInicio; }

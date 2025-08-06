@@ -4,15 +4,8 @@
  */
 package com.infinihr.repositorio;
 
-/**
- *
- * @author ruben
- */
-
-
 import com.infinihr.entidades.Beneficio;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface BeneficioRepository extends JpaRepository<Beneficio, Long> {
 }
-

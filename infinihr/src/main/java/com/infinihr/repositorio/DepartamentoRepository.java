@@ -7,5 +7,5 @@ package com.infinihr.repositorio;
 import com.infinihr.entidades.Departamento;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface DepartamentoRepository extends JpaRepository<Departamento, Integer> {
+public interface DepartamentoRepository extends JpaRepository<Departamento, Long> {
 }

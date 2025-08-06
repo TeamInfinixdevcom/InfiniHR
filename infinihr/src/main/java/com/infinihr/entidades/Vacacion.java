@@ -10,6 +10,7 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "vacaciones")
 public class Vacacion {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -18,14 +19,17 @@ public class Vacacion {
     @JoinColumn(name = "empleado_id")
     private Empleado empleado;
 
-    @Column(name = "fecha_inicio")
+    @Column(name = "fecha_inicio", nullable = false)
     private LocalDate fechaInicio;
 
-    @Column(name = "fecha_fin")
+    @Column(name = "fecha_fin", nullable = false)
     private LocalDate fechaFin;
 
-    private Integer dias;
-    private String estado;
+    @Column(length = 255)
+    private String motivo;
+
+    @Column(nullable = false)
+    private String estado; // Ejemplo: Pendiente, Aprobado, Rechazado
 
     // Getters y setters
 
@@ -41,10 +45,9 @@ public class Vacacion {
     public LocalDate getFechaFin() { return fechaFin; }
     public void setFechaFin(LocalDate fechaFin) { this.fechaFin = fechaFin; }
 
-    public Integer getDias() { return dias; }
-    public void setDias(Integer dias) { this.dias = dias; }
+    public String getMotivo() { return motivo; }
+    public void setMotivo(String motivo) { this.motivo = motivo; }
 
     public String getEstado() { return estado; }
     public void setEstado(String estado) { this.estado = estado; }
 }
-

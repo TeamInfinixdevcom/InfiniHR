@@ -4,12 +4,6 @@
  */
 package com.infinihr.entidades;
 
-/**
- *
- * @author ruben
- */
-
-
 import jakarta.persistence.*;
 import java.time.LocalDate;
 
@@ -30,7 +24,13 @@ public class Permiso {
     @Column(name = "fecha_fin")
     private LocalDate fechaFin;
 
+    @Column(length = 100)
+    private String tipo; // Nuevo campo para el tipo de permiso
+
+    @Column(length = 255)
     private String motivo;
+
+    @Column(nullable = false)
     private String estado;
 
     // Getters y setters
@@ -46,6 +46,9 @@ public class Permiso {
 
     public LocalDate getFechaFin() { return fechaFin; }
     public void setFechaFin(LocalDate fechaFin) { this.fechaFin = fechaFin; }
+
+    public String getTipo() { return tipo; }
+    public void setTipo(String tipo) { this.tipo = tipo; }
 
     public String getMotivo() { return motivo; }
     public void setMotivo(String motivo) { this.motivo = motivo; }

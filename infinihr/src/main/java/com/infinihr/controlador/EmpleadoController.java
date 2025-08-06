@@ -4,27 +4,61 @@
  */
 package com.infinihr.controlador;
 
-import com.infinihr.entidades.Empleado;
-import com.infinihr.repositorio.EmpleadoRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.infinihr.dto.EmpleadoDTO;
+import com.infinihr.servicio.EmpleadoService;
+import jakarta.validation.Valid;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/empleados")
+@CrossOrigin(origins = "http://localhost:4200")
 public class EmpleadoController {
 
-    @Autowired
-    private EmpleadoRepository empleadoRepository;
+    private final EmpleadoService servicio;
+
+    public EmpleadoController(EmpleadoService servicio) {
+        this.servicio = servicio;
+    }
 
     @GetMapping
-    public List<Empleado> getAllEmpleados() {
-        return empleadoRepository.findAll();
+    public List<EmpleadoDTO> all() {
+        return servicio.listarTodosDTO();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<EmpleadoDTO> getOne(@PathVariable Long id) {
+        return servicio.buscarPorIdDTO(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public Empleado crearEmpleado(@RequestBody Empleado empleado) {
-        return empleadoRepository.save(empleado);
+    public ResponseEntity<EmpleadoDTO> create(@RequestBody @Valid EmpleadoDTO dto) {
+        EmpleadoDTO guardado = servicio.guardarDTO(dto);
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(guardado.getId())
+                .toUri();
+        return ResponseEntity.created(location).body(guardado);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<EmpleadoDTO> update(@PathVariable Long id,
+                                              @RequestBody @Valid EmpleadoDTO dto) {
+        return servicio.actualizarDTO(id, dto)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        servicio.eliminar(id);
+        return ResponseEntity.noContent().build();
     }
 }

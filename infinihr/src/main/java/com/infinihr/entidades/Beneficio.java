@@ -4,12 +4,6 @@
  */
 package com.infinihr.entidades;
 
-/**
- *
- * @author ruben
- */
-
-
 import jakarta.persistence.*;
 import java.time.LocalDate;
 
@@ -47,3 +41,4 @@ public class Beneficio {
     public LocalDate getFechaOtorgado() { return fechaOtorgado; }
     public void setFechaOtorgado(LocalDate fechaOtorgado) { this.fechaOtorgado = fechaOtorgado; }
 }
+

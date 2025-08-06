@@ -4,12 +4,6 @@
  */
 package com.infinihr.repositorio;
 
-/**
- *
- * @author ruben
- */
-
-
 import com.infinihr.entidades.Parentesco;
 import org.springframework.data.jpa.repository.JpaRepository;
 

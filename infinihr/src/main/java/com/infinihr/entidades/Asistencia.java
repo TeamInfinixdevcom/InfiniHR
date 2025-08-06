@@ -11,6 +11,7 @@ import java.time.LocalTime;
 @Entity
 @Table(name = "asistencias")
 public class Asistencia {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -19,10 +20,17 @@ public class Asistencia {
     @JoinColumn(name = "empleado_id")
     private Empleado empleado;
 
+    @Column(nullable = false)
     private LocalDate fecha;
+
+    @Column(name = "hora_entrada", nullable = false)
     private LocalTime horaEntrada;
-    private LocalTime horaSalida;
-    private String observacion;
+
+    @Column(name = "hora_salida")
+    private LocalTime horaSalida; // Puede ser null si aún no ha salido
+
+    @Column(length = 255)
+    private String observacion; // Comentarios o justificación de la asistencia
 
     // Getters y setters
 

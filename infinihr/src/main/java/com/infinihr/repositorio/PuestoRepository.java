@@ -8,5 +8,5 @@ package com.infinihr.repositorio;
 import com.infinihr.entidades.Puesto;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface PuestoRepository extends JpaRepository<Puesto, Integer> {
+public interface PuestoRepository extends JpaRepository<Puesto, Long> {
 }
