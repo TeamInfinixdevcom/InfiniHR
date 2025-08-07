@@ -10,8 +10,12 @@ package com.infinihr.repositorio;
  */
 
 
+
 import com.infinihr.entidades.Genero;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface GeneroRepository extends JpaRepository<Genero, Long> {
+    // Puede agregar métodos personalizados aquí si ocupa
 }

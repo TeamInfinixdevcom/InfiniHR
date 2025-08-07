@@ -9,8 +9,12 @@ package com.infinihr.repositorio;
  * @author ruben
  */
 
+
 import com.infinihr.entidades.Nacionalidad;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface NacionalidadRepository extends JpaRepository<Nacionalidad, Long> {
+    // Aquí puede agregar métodos personalizados si en algún momento ocupa
 }

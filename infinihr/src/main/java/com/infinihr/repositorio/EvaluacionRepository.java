@@ -10,11 +10,11 @@ package com.infinihr.repositorio;
  */
 
 
-import com.infinihr.entidades.EstadoCivil;
+import com.infinihr.entidades.Evaluacion;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface EstadoCivilRepository extends JpaRepository<EstadoCivil, Long> {
-    // Puede agregar métodos personalizados aquí si ocupa
+public interface EvaluacionRepository extends JpaRepository<Evaluacion, Long> {
+    // Métodos personalizados aquí si ocupa
 }

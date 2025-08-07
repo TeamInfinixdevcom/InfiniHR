@@ -4,45 +4,41 @@
  */
 package com.infinihr.entidades;
 
-/**
- *
- * @author ruben
- */
-
-
-
-
 import jakarta.persistence.*;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "proyecto")
-public class Proyecto {
+@Table(name = "salario_historial")
+public class SalarioHistorial {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
-    private String nombre;
+    @Column(nullable = false)
+    private String empleado; // Puede ser el nombre, cédula o id. Cámbielo si ocupa relación
 
     @Column(nullable = false)
-    private String descripcion;
+    private Double salario;
 
     @Column(nullable = false)
     private LocalDate fechaInicio;
 
-    @Column
+    @Column(nullable = false)
     private LocalDate fechaFin;
 
-    // Constructores
-    public Proyecto() {}
+    @Column(length = 1000)
+    private String motivoCambio;
 
-    public Proyecto(String nombre, String descripcion, LocalDate fechaInicio, LocalDate fechaFin) {
-        this.nombre = nombre;
-        this.descripcion = descripcion;
+    // Constructores
+    public SalarioHistorial() {}
+
+    public SalarioHistorial(String empleado, Double salario, LocalDate fechaInicio, LocalDate fechaFin, String motivoCambio) {
+        this.empleado = empleado;
+        this.salario = salario;
         this.fechaInicio = fechaInicio;
         this.fechaFin = fechaFin;
+        this.motivoCambio = motivoCambio;
     }
 
     // Getters y Setters
@@ -55,20 +51,20 @@ public class Proyecto {
         this.id = id;
     }
 
-    public String getNombre() {
-        return nombre;
+    public String getEmpleado() {
+        return empleado;
     }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
+    public void setEmpleado(String empleado) {
+        this.empleado = empleado;
     }
 
-    public String getDescripcion() {
-        return descripcion;
+    public Double getSalario() {
+        return salario;
     }
 
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
+    public void setSalario(Double salario) {
+        this.salario = salario;
     }
 
     public LocalDate getFechaInicio() {
@@ -87,15 +83,24 @@ public class Proyecto {
         this.fechaFin = fechaFin;
     }
 
+    public String getMotivoCambio() {
+        return motivoCambio;
+    }
+
+    public void setMotivoCambio(String motivoCambio) {
+        this.motivoCambio = motivoCambio;
+    }
+
     // toString (opcional)
     @Override
     public String toString() {
-        return "Proyecto{" +
+        return "SalarioHistorial{" +
                 "id=" + id +
-                ", nombre='" + nombre + '\'' +
-                ", descripcion='" + descripcion + '\'' +
+                ", empleado='" + empleado + '\'' +
+                ", salario=" + salario +
                 ", fechaInicio=" + fechaInicio +
                 ", fechaFin=" + fechaFin +
+                ", motivoCambio='" + motivoCambio + '\'' +
                 '}';
     }
 }

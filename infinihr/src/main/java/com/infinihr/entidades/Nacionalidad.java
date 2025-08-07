@@ -9,22 +9,52 @@ package com.infinihr.entidades;
  * @author ruben
  */
 
+
+
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "nacionalidades")
+@Table(name = "nacionalidad")
 public class Nacionalidad {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false, unique = true)
     private String nombre;
 
-    // Getters y setters
+    // Constructores
+    public Nacionalidad() {}
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public Nacionalidad(String nombre) {
+        this.nombre = nombre;
+    }
 
-    public String getNombre() { return nombre; }
-    public void setNombre(String nombre) { this.nombre = nombre; }
+    // Getters y Setters
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    // toString (opcional)
+    @Override
+    public String toString() {
+        return "Nacionalidad{" +
+                "id=" + id +
+                ", nombre='" + nombre + '\'' +
+                '}';
+    }
 }

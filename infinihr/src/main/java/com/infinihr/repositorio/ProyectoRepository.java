@@ -12,6 +12,9 @@ package com.infinihr.repositorio;
 
 import com.infinihr.entidades.Proyecto;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface ProyectoRepository extends JpaRepository<Proyecto, Long> {
+    // Puede agregar métodos personalizados aquí si ocupa
 }

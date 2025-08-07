@@ -10,8 +10,13 @@ package com.infinihr.repositorio;
  */
 
 
+
+
 import com.infinihr.entidades.Asignacion;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface AsignacionRepository extends JpaRepository<Asignacion, Long> {
+    // Puede agregar métodos personalizados aquí si ocupa
 }

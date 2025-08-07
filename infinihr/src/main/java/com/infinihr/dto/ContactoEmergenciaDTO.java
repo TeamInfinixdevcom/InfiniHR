@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.infinihr.entidades;
+package com.infinihr.dto;
 
 /**
  *
@@ -10,40 +10,20 @@ package com.infinihr.entidades;
  */
 
 
-
-import jakarta.persistence.*;
-import java.time.LocalDate;
-
-@Entity
-@Table(name = "contacto_emergencia")
-public class ContactoEmergencia {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class ContactoEmergenciaDTO {
     private Long id;
-
-    @Column(nullable = false)
-    private String empleado; // Puede ser nombre, cédula o id de empleado
-
-    @Column(nullable = false)
+    private String empleado;
     private String nombreContacto;
-
-    @Column(nullable = false)
     private String parentesco;
-
-    @Column(nullable = false)
     private String telefono;
-
-    @Column
     private String correo;
-
-    @Column
     private String direccion;
 
     // Constructores
-    public ContactoEmergencia() {}
+    public ContactoEmergenciaDTO() {}
 
-    public ContactoEmergencia(String empleado, String nombreContacto, String parentesco, String telefono, String correo, String direccion) {
+    public ContactoEmergenciaDTO(Long id, String empleado, String nombreContacto, String parentesco, String telefono, String correo, String direccion) {
+        this.id = id;
         this.empleado = empleado;
         this.nombreContacto = nombreContacto;
         this.parentesco = parentesco;
@@ -113,7 +93,7 @@ public class ContactoEmergencia {
     // toString (opcional)
     @Override
     public String toString() {
-        return "ContactoEmergencia{" +
+        return "ContactoEmergenciaDTO{" +
                 "id=" + id +
                 ", empleado='" + empleado + '\'' +
                 ", nombreContacto='" + nombreContacto + '\'' +

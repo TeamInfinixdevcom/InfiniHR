@@ -2,19 +2,18 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.infinihr.repositorio;
 
 /**
  *
  * @author ruben
  */
+package com.infinihr.repositorio;
 
-
-import com.infinihr.entidades.EstadoCivil;
+import com.infinihr.entidades.SalarioHistorial;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface EstadoCivilRepository extends JpaRepository<EstadoCivil, Long> {
-    // Puede agregar métodos personalizados aquí si ocupa
+public interface SalarioHistorialRepository extends JpaRepository<SalarioHistorial, Long> {
+    // Métodos personalizados aquí si ocupa
 }

@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.infinihr.entidades;
+package com.infinihr.dto;
 
 /**
  *
@@ -10,39 +10,26 @@ package com.infinihr.entidades;
  */
 
 
-
-
-import jakarta.persistence.*;
 import java.time.LocalDate;
 
-@Entity
-@Table(name = "proyecto")
-public class Proyecto {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class IncapacidadDTO {
     private Long id;
-
-    @Column(nullable = false, unique = true)
-    private String nombre;
-
-    @Column(nullable = false)
-    private String descripcion;
-
-    @Column(nullable = false)
+    private String empleado;        // Puede ser nombre o id según cómo lo maneje
     private LocalDate fechaInicio;
-
-    @Column
     private LocalDate fechaFin;
+    private String tipo;
+    private String observaciones;
 
     // Constructores
-    public Proyecto() {}
+    public IncapacidadDTO() {}
 
-    public Proyecto(String nombre, String descripcion, LocalDate fechaInicio, LocalDate fechaFin) {
-        this.nombre = nombre;
-        this.descripcion = descripcion;
+    public IncapacidadDTO(Long id, String empleado, LocalDate fechaInicio, LocalDate fechaFin, String tipo, String observaciones) {
+        this.id = id;
+        this.empleado = empleado;
         this.fechaInicio = fechaInicio;
         this.fechaFin = fechaFin;
+        this.tipo = tipo;
+        this.observaciones = observaciones;
     }
 
     // Getters y Setters
@@ -55,20 +42,12 @@ public class Proyecto {
         this.id = id;
     }
 
-    public String getNombre() {
-        return nombre;
+    public String getEmpleado() {
+        return empleado;
     }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public String getDescripcion() {
-        return descripcion;
-    }
-
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
+    public void setEmpleado(String empleado) {
+        this.empleado = empleado;
     }
 
     public LocalDate getFechaInicio() {
@@ -87,15 +66,32 @@ public class Proyecto {
         this.fechaFin = fechaFin;
     }
 
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+
+    public String getObservaciones() {
+        return observaciones;
+    }
+
+    public void setObservaciones(String observaciones) {
+        this.observaciones = observaciones;
+    }
+
     // toString (opcional)
     @Override
     public String toString() {
-        return "Proyecto{" +
+        return "IncapacidadDTO{" +
                 "id=" + id +
-                ", nombre='" + nombre + '\'' +
-                ", descripcion='" + descripcion + '\'' +
+                ", empleado='" + empleado + '\'' +
                 ", fechaInicio=" + fechaInicio +
                 ", fechaFin=" + fechaFin +
+                ", tipo='" + tipo + '\'' +
+                ", observaciones='" + observaciones + '\'' +
                 '}';
     }
 }

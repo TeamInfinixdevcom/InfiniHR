@@ -9,28 +9,46 @@ package com.infinihr.controlador;
  * @author ruben
  */
 
-
-import com.infinihr.entidades.Genero;
-import com.infinihr.repositorio.GeneroRepository;
+import com.infinihr.dto.GeneroDTO;
+import com.infinihr.servicio.GeneroService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/generos")
+@RequestMapping("/api/genero")
 public class GeneroController {
 
     @Autowired
-    private GeneroRepository generoRepository;
-
-    @GetMapping
-    public List<Genero> getAll() {
-        return generoRepository.findAll();
-    }
+    private GeneroService generoService;
 
     @PostMapping
-    public Genero crear(@RequestBody Genero genero) {
-        return generoRepository.save(genero);
+    public ResponseEntity<GeneroDTO> crearGenero(@RequestBody GeneroDTO generoDTO) {
+        GeneroDTO nuevo = generoService.crearGenero(generoDTO);
+        return ResponseEntity.ok(nuevo);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<GeneroDTO>> listarGeneros() {
+        List<GeneroDTO> lista = generoService.listarGeneros();
+        return ResponseEntity.ok(lista);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<GeneroDTO> obtenerGeneroPorId(@PathVariable Long id) {
+        GeneroDTO genero = generoService.obtenerGeneroPorId(id);
+        if (genero != null) {
+            return ResponseEntity.ok(genero);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> eliminarGenero(@PathVariable Long id) {
+        generoService.eliminarGenero(id);
+        return ResponseEntity.noContent().build();
     }
 }

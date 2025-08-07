@@ -10,27 +10,47 @@ package com.infinihr.controlador;
  */
 
 
-import com.infinihr.entidades.ContactoEmergencia;
-import com.infinihr.repositorio.ContactoEmergenciaRepository;
+
+import com.infinihr.dto.ContactoEmergenciaDTO;
+import com.infinihr.servicio.ContactoEmergenciaService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/contactos-emergencia")
+@RequestMapping("/api/contacto-emergencia")
 public class ContactoEmergenciaController {
 
     @Autowired
-    private ContactoEmergenciaRepository contactoEmergenciaRepository;
-
-    @GetMapping
-    public List<ContactoEmergencia> getAllContactos() {
-        return contactoEmergenciaRepository.findAll();
-    }
+    private ContactoEmergenciaService contactoEmergenciaService;
 
     @PostMapping
-    public ContactoEmergencia crearContacto(@RequestBody ContactoEmergencia contacto) {
-        return contactoEmergenciaRepository.save(contacto);
+    public ResponseEntity<ContactoEmergenciaDTO> crearContactoEmergencia(@RequestBody ContactoEmergenciaDTO contactoEmergenciaDTO) {
+        ContactoEmergenciaDTO nuevo = contactoEmergenciaService.crearContactoEmergencia(contactoEmergenciaDTO);
+        return ResponseEntity.ok(nuevo);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<ContactoEmergenciaDTO>> listarContactosEmergencia() {
+        List<ContactoEmergenciaDTO> lista = contactoEmergenciaService.listarContactosEmergencia();
+        return ResponseEntity.ok(lista);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ContactoEmergenciaDTO> obtenerContactoEmergenciaPorId(@PathVariable Long id) {
+        ContactoEmergenciaDTO contacto = contactoEmergenciaService.obtenerContactoEmergenciaPorId(id);
+        if (contacto != null) {
+            return ResponseEntity.ok(contacto);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> eliminarContactoEmergencia(@PathVariable Long id) {
+        contactoEmergenciaService.eliminarContactoEmergencia(id);
+        return ResponseEntity.noContent().build();
     }
 }

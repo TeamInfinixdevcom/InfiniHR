@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.infinihr.entidades;
+package com.infinihr.dto;
 
 /**
  *
@@ -10,35 +10,20 @@ package com.infinihr.entidades;
  */
 
 
-
-
-import jakarta.persistence.*;
 import java.time.LocalDate;
 
-@Entity
-@Table(name = "proyecto")
-public class Proyecto {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class ProyectoDTO {
     private Long id;
-
-    @Column(nullable = false, unique = true)
     private String nombre;
-
-    @Column(nullable = false)
     private String descripcion;
-
-    @Column(nullable = false)
     private LocalDate fechaInicio;
-
-    @Column
     private LocalDate fechaFin;
 
     // Constructores
-    public Proyecto() {}
+    public ProyectoDTO() {}
 
-    public Proyecto(String nombre, String descripcion, LocalDate fechaInicio, LocalDate fechaFin) {
+    public ProyectoDTO(Long id, String nombre, String descripcion, LocalDate fechaInicio, LocalDate fechaFin) {
+        this.id = id;
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.fechaInicio = fechaInicio;
@@ -90,7 +75,7 @@ public class Proyecto {
     // toString (opcional)
     @Override
     public String toString() {
-        return "Proyecto{" +
+        return "ProyectoDTO{" +
                 "id=" + id +
                 ", nombre='" + nombre + '\'' +
                 ", descripcion='" + descripcion + '\'' +

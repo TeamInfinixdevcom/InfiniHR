@@ -2,31 +2,22 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.infinihr.entidades;
+package com.infinihr.dto;
 
 /**
  *
  * @author ruben
  */
 
-
-import jakarta.persistence.*;
-
-@Entity
-@Table(name = "estado_civil")
-public class EstadoCivil {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class GeneroDTO {
     private Long id;
-
-    @Column(nullable = false, unique = true)
     private String nombre;
 
     // Constructores
-    public EstadoCivil() {}
+    public GeneroDTO() {}
 
-    public EstadoCivil(String nombre) {
+    public GeneroDTO(Long id, String nombre) {
+        this.id = id;
         this.nombre = nombre;
     }
 
@@ -51,7 +42,7 @@ public class EstadoCivil {
     // toString (opcional)
     @Override
     public String toString() {
-        return "EstadoCivil{" +
+        return "GeneroDTO{" +
                 "id=" + id +
                 ", nombre='" + nombre + '\'' +
                 '}';

@@ -4,17 +4,11 @@
  */
 package com.infinihr.repositorio;
 
-/**
- *
- * @author ruben
- */
-
-
-import com.infinihr.entidades.EstadoCivil;
+import com.infinihr.entidades.Auditoria;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface EstadoCivilRepository extends JpaRepository<EstadoCivil, Long> {
-    // Puede agregar métodos personalizados aquí si ocupa
+public interface AuditoriaRepository extends JpaRepository<Auditoria, Long> {
+    // Aquí puede agregar métodos personalizados si los ocupa
 }

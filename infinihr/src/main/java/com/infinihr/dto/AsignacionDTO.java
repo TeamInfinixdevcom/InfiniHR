@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.infinihr.entidades;
+package com.infinihr.dto;
 
 /**
  *
@@ -10,37 +10,22 @@ package com.infinihr.entidades;
  */
 
 
-
-import jakarta.persistence.*;
 import java.time.LocalDate;
 
-@Entity
-@Table(name = "asignacion")
-public class Asignacion {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class AsignacionDTO {
     private Long id;
-
-    @Column(nullable = false)
-    private String empleado; // Puede ser el nombre, cédula o id de empleado
-
-    @ManyToOne
-    @JoinColumn(name = "proyecto_id", nullable = false)
-    private Proyecto proyecto;
-
-    @Column(nullable = false)
+    private String empleado;     // Puede ser nombre, cédula o id según su sistema
+    private Long proyectoId;     // Solo el id del proyecto, para simplicidad en el DTO
     private LocalDate fechaAsignacion;
-
-    @Column
-    private String rol; // Ejemplo: "Líder", "Desarrollador", etc.
+    private String rol;
 
     // Constructores
-    public Asignacion() {}
+    public AsignacionDTO() {}
 
-    public Asignacion(String empleado, Proyecto proyecto, LocalDate fechaAsignacion, String rol) {
+    public AsignacionDTO(Long id, String empleado, Long proyectoId, LocalDate fechaAsignacion, String rol) {
+        this.id = id;
         this.empleado = empleado;
-        this.proyecto = proyecto;
+        this.proyectoId = proyectoId;
         this.fechaAsignacion = fechaAsignacion;
         this.rol = rol;
     }
@@ -63,12 +48,12 @@ public class Asignacion {
         this.empleado = empleado;
     }
 
-    public Proyecto getProyecto() {
-        return proyecto;
+    public Long getProyectoId() {
+        return proyectoId;
     }
 
-    public void setProyecto(Proyecto proyecto) {
-        this.proyecto = proyecto;
+    public void setProyectoId(Long proyectoId) {
+        this.proyectoId = proyectoId;
     }
 
     public LocalDate getFechaAsignacion() {
@@ -90,10 +75,10 @@ public class Asignacion {
     // toString (opcional)
     @Override
     public String toString() {
-        return "Asignacion{" +
+        return "AsignacionDTO{" +
                 "id=" + id +
                 ", empleado='" + empleado + '\'' +
-                ", proyecto=" + (proyecto != null ? proyecto.getId() : null) +
+                ", proyectoId=" + proyectoId +
                 ", fechaAsignacion=" + fechaAsignacion +
                 ", rol='" + rol + '\'' +
                 '}';

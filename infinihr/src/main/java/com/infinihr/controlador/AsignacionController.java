@@ -10,27 +10,47 @@ package com.infinihr.controlador;
  */
 
 
-import com.infinihr.entidades.Asignacion;
-import com.infinihr.repositorio.AsignacionRepository;
+
+import com.infinihr.dto.AsignacionDTO;
+import com.infinihr.servicio.AsignacionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/asignaciones")
+@RequestMapping("/api/asignacion")
 public class AsignacionController {
 
     @Autowired
-    private AsignacionRepository asignacionRepository;
-
-    @GetMapping
-    public List<Asignacion> getAllAsignaciones() {
-        return asignacionRepository.findAll();
-    }
+    private AsignacionService asignacionService;
 
     @PostMapping
-    public Asignacion crearAsignacion(@RequestBody Asignacion asignacion) {
-        return asignacionRepository.save(asignacion);
+    public ResponseEntity<AsignacionDTO> crearAsignacion(@RequestBody AsignacionDTO asignacionDTO) {
+        AsignacionDTO nuevo = asignacionService.crearAsignacion(asignacionDTO);
+        return ResponseEntity.ok(nuevo);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<AsignacionDTO>> listarAsignaciones() {
+        List<AsignacionDTO> lista = asignacionService.listarAsignaciones();
+        return ResponseEntity.ok(lista);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<AsignacionDTO> obtenerAsignacionPorId(@PathVariable Long id) {
+        AsignacionDTO asignacion = asignacionService.obtenerAsignacionPorId(id);
+        if (asignacion != null) {
+            return ResponseEntity.ok(asignacion);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> eliminarAsignacion(@PathVariable Long id) {
+        asignacionService.eliminarAsignacion(id);
+        return ResponseEntity.noContent().build();
     }
 }
