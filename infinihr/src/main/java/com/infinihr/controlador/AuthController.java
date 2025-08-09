@@ -4,40 +4,66 @@
  */
 package com.infinihr.controlador;
 
-import com.infinihr.dto.UsuarioDTO;
 import com.infinihr.entidades.Usuario;
 import com.infinihr.repositorio.UsuarioRepository;
 import com.infinihr.seguridad.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/auth")
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "*")
 public class AuthController {
 
-    @Autowired
-    private UsuarioRepository usuarioRepo;
+    @Autowired private AuthenticationManager authManager;
+    @Autowired private JwtUtil jwtUtil;
 
-    @Autowired
-    private JwtUtil jwtUtil;
-
-    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    // Solo para el endpoint de diagnóstico (no se usa en login normal)
+    @Autowired private UsuarioRepository usuarioRepo;
+    @Autowired private PasswordEncoder passwordEncoder;
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody UsuarioDTO loginRequest) {
-        Optional<Usuario> userOpt = usuarioRepo.findByUsername(loginRequest.getUsername());
-        if (userOpt.isPresent()) {
-            Usuario user = userOpt.get();
-            if (passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
-                String token = jwtUtil.generateToken(user.getUsername(), user.getRol());
-                return ResponseEntity.ok().body("{\"token\": \"" + token + "\"}");
-            }
+    public ResponseEntity<?> login(@RequestBody LoginRequest req) {
+        try {
+            Authentication auth = authManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(req.getUsername(), req.getPassword())
+            );
+            UserDetails user = (UserDetails) auth.getPrincipal();
+            String token = jwtUtil.generateToken(user);
+            return ResponseEntity.ok("{\"token\":\"" + token + "\"}");
+        } catch (Exception e) {
+            return ResponseEntity.status(401).body("{\"error\":\"Credenciales inválidas\"}");
         }
-        return ResponseEntity.status(401).body("{\"error\": \"Credenciales inválidas\"}");
+    }
+
+    // Endpoint de diagnóstico para revisar existencia del usuario y match de contraseña
+    @PostMapping("/debug-match")
+    public ResponseEntity<?> debugMatch(@RequestBody LoginRequest req) {
+        Optional<Usuario> userOpt = usuarioRepo.findByUsername(req.getUsername());
+        if (userOpt.isEmpty()) {
+            return ResponseEntity.ok("{\"exists\":false}");
+        }
+        Usuario user = userOpt.get();
+        boolean matches = passwordEncoder.matches(req.getPassword(), user.getPassword());
+        return ResponseEntity.ok("{\"exists\":true,"
+                + "\"storedHash\":\"" + user.getPassword() + "\","
+                + "\"matches\":" + matches + "}");
+    }
+
+    public static class LoginRequest {
+        private String username;
+        private String password;
+        public String getUsername() { return username; }
+        public void setUsername(String username) { this.username = username; }
+        public String getPassword() { return password; }
+        public void setPassword(String password) { this.password = password; }
     }
 }
