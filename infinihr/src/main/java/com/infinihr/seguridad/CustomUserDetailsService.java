@@ -4,30 +4,38 @@
  */
 package com.infinihr.seguridad;
 
-import com.infinihr.entidades.Usuario;
+import com.infinhihr.repositorio.UsuarioRepository;
 import com.infinihr.repositorio.UsuarioRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
+
 public class CustomUserDetailsService implements UserDetailsService {
 
-    @Autowired
-    private UsuarioRepository usuarioRepository;
-
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Usuario usuario = usuarioRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado: " + username));
-
-        return User.builder()
-                .username(usuario.getUsername())
-                .password(usuario.getPassword()) // ya debe estar encriptada
-                .roles(usuario.getRol()) // asegúrese que rol sea algo como "ADMIN" o "USER"
-                .build();
+    public CustomUserDetailsService(com.infinhihr.repositorio.UsuarioRepository usuarioRepository) {
+        this.usuarioRepository = usuarioRepository;
     }
+
+  private final UsuarioRepository usuarioRepository;
+
+  @Override
+  public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    var u = usuarioRepository.findByUsername(username)
+        .orElseThrow(() -> new UsernameNotFoundException("No existe: " + username));
+
+    // IMPORTANTE: devolver el hash tal cual viene de BD (NO re-encodear)
+    return new User(
+        u.getUsername(),
+        u.getPassword(),
+        List.of(new SimpleGrantedAuthority("ROLE_" + u.getRol())) // ADMIN -> ROLE_ADMIN
+    );
+  }
 }
